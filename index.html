@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FasterFold — Agentic software today. Robotics next.</title>
+<meta name="description" content="FasterFold builds agentic applications and the tooling that measures them, including TokenTelemetry, open-source observability for 21 AI agents. Build with AI. Ship with proof.">
+<meta property="og:title" content="FasterFold — Build with AI. Ship with proof.">
+<meta property="og:description" content="Agentic applications, agent observability, and the road to robotics.">
+<meta name="theme-color" content="#0B0C0E">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#FD581E; --orange-ink:#D9420C;
+  --ink:#0B0C0E; --ink-2:#131518; --ink-3:#1C1E21; --line-d:rgba(255,255,255,.1);
+  --paper:#F5F5F7; --white:#fff; --line-l:rgba(0,0,0,.09);
+  --text-d:#F7F7F8; --muted-d:#9A9B9E; --text-l:#1D1D1F; --muted-l:#5E5E63;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --wrap:1180px; --r:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--body);background:var(--ink);color:var(--text-d);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+section{padding:120px 0;position:relative}
+.light{background:var(--paper);color:var(--text-l)}
+.white{background:var(--white);color:var(--text-l)}
+.kicker{font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin:0 0 20px}
+.light .kicker,.white .kicker{color:var(--orange-ink)}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.035em;line-height:1.02;margin:0;text-wrap:balance}
+h1{font-size:clamp(46px,8.2vw,112px)}
+h2{font-size:clamp(36px,5.4vw,68px)}
+h3{font-size:clamp(22px,2.2vw,28px);letter-spacing:-.02em;line-height:1.15}
+.lede{font-size:clamp(18px,1.7vw,22px);line-height:1.5;color:var(--muted-d);max-width:680px;margin:26px 0 0;text-wrap:pretty}
+.light .lede,.white .lede{color:var(--muted-l)}
+.o{color:var(--orange)}
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 16px/1 var(--body);padding:16px 26px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:transform .2s,background .2s,border-color .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-p{background:var(--orange);color:#fff}
+.btn-p:hover{background:#ff6a35}
+.btn-g{border-color:var(--line-d);color:var(--text-d)}
+.btn-g:hover{border-color:rgba(255,255,255,.35)}
+.light .btn-g,.white .btn-g{border-color:rgba(0,0,0,.2);color:var(--text-l)}
+.btn svg{width:16px;height:16px}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:6px}
+
+/* nav */
+nav{position:fixed;inset:0 0 auto 0;z-index:50;background:rgba(11,12,14,.72);backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);border-bottom:1px solid var(--line-d)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:11px;font:700 19px var(--display);letter-spacing:-.02em}
+.brand img{height:26px;width:auto}
+.links{display:flex;gap:30px;font-size:14px;color:var(--muted-d)}
+.links a:hover{color:#fff}
+nav .btn{padding:10px 18px;font-size:14px}
+
+/* hero */
+.hero{padding:150px 0 0;text-align:center;background:radial-gradient(900px 480px at 50% 78%,rgba(253,88,30,.2),transparent 70%),var(--ink)}
+.hero .lede{margin-left:auto;margin-right:auto}
+.cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
+.hero .cta{justify-content:center}
+.fine{font-size:13.5px;color:var(--muted-d);margin-top:18px}
+.stage{margin:76px auto 0;max-width:1080px;perspective:1800px}
+.window{border-radius:16px 16px 0 0;overflow:hidden;border:1px solid var(--line-d);border-bottom:0;background:#0d1117;box-shadow:0 -30px 120px rgba(253,88,30,.16);transform:rotateX(9deg);transform-origin:50% 100%;will-change:transform}
+.chrome{display:flex;align-items:center;gap:7px;padding:12px 16px;background:#16181c;border-bottom:1px solid var(--line-d)}
+.chrome i{width:11px;height:11px;border-radius:50%;background:#3a3d42}
+.chrome span{margin-left:14px;font:500 12px var(--mono);color:var(--muted-d)}
+
+/* proof */
+.proof{padding:0;background:var(--ink-2);border-block:1px solid var(--line-d)}
+.proof .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:38px 24px;border-left:1px solid var(--line-d)}
+.stat:first-child{border-left:0;padding-left:0}
+.stat b{display:block;font:700 clamp(34px,4vw,52px)/1 var(--display);letter-spacing:-.04em}
+.stat span{display:block;margin-top:10px;font-size:14.5px;color:var(--muted-d)}
+.stat a{color:var(--text-d);border-bottom:1px solid rgba(255,255,255,.3)}
+.asof{font:500 11.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#6d6e72;padding:0 0 22px}
+
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px}
+.card{background:var(--white);border-radius:var(--r);padding:34px 30px 30px;display:flex;flex-direction:column;border:1px solid var(--line-l)}
+.card .n{font:600 12.5px var(--mono);letter-spacing:.18em;color:var(--orange-ink);margin-bottom:22px}
+.card p{color:var(--muted-l);margin:14px 0 0;font-size:16px}
+.card ul{list-style:none;padding:20px 0 0;margin:auto 0 0;border-top:1px solid var(--line-l);font-size:14.5px;color:var(--text-l)}
+.card ul{margin-top:24px}
+.card li{padding:6px 0 6px 22px;position:relative}
+.card li:before{content:"";position:absolute;left:0;top:14px;width:10px;height:2px;background:var(--orange)}
+
+/* product */
+.split{display:grid;grid-template-columns:1fr 1.15fr;gap:64px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:8px;font:600 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:999px;border:1px solid var(--line-d);color:var(--muted-d)}
+.tag:before{content:"";width:7px;height:7px;border-radius:50%;background:#3ddc97}
+.tag.amber:before{background:#f5b301}.tag.grey:before{background:#77787c}
+.light .tag,.white .tag{border-color:var(--line-l);color:var(--muted-l)}
+.pname{display:flex;align-items:center;gap:14px;margin:22px 0 0}
+.pname img{width:44px;height:44px}
+.feat{list-style:none;padding:0;margin:30px 0 0;display:grid;gap:16px}
+.feat li{padding-left:30px;position:relative;color:var(--muted-d)}
+.feat li b{color:var(--text-d);font-weight:600}
+.feat li:before{content:"";position:absolute;left:0;top:9px;width:14px;height:8px;border-left:2px solid var(--orange);border-bottom:2px solid var(--orange);transform:rotate(-45deg) translateY(-3px)}
+.term{margin-top:30px;background:#000;border:1px solid var(--line-d);border-radius:14px;padding:16px 18px;font:500 13px/1.5 var(--mono);color:#d7d8da;display:flex;gap:12px;align-items:center}
+.term code{flex:1;overflow-x:auto;white-space:nowrap;font:inherit;scrollbar-width:none}
+.term code:before{content:"$ ";color:var(--orange)}
+.term button{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--ink-3);color:var(--text-d);border:1px solid var(--line-d);border-radius:8px;padding:8px 10px;cursor:pointer}
+.shot{border-radius:18px;overflow:hidden;border:1px solid var(--line-d);box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.more{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:90px}
+.pcard{background:var(--ink-2);border:1px solid var(--line-d);border-radius:var(--r);padding:34px 30px}
+.pcard h3{margin-top:20px}
+.pcard p{color:var(--muted-d);margin:12px 0 0;font-size:16px}
+.pcard a.t{display:inline-block;margin-top:20px;font-weight:600;font-size:15px;color:var(--orange)}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:70px;border-top:1px solid var(--line-l)}
+.step{padding:30px 26px 0 0;position:relative}
+.step:before{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--orange)}
+.step .n{font:600 12.5px var(--mono);letter-spacing:.18em;color:var(--orange-ink)}
+.step h3{margin-top:14px}
+.step p{color:var(--muted-l);font-size:15.5px;margin:10px 0 0}
+.promise{margin-top:80px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.promise div{background:var(--paper);border-radius:var(--r);padding:28px}
+.promise b{font:700 19px var(--display);letter-spacing:-.02em;display:block}
+.promise span{display:block;color:var(--muted-l);font-size:15px;margin-top:8px}
+
+/* robotics */
+.robo{background:radial-gradient(800px 500px at 85% 0%,rgba(253,88,30,.16),transparent 70%),var(--ink)}
+.road{margin-top:70px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.phase{border:1px solid var(--line-d);border-radius:var(--r);padding:30px;background:rgba(255,255,255,.02)}
+.phase.now{border-color:rgba(253,88,30,.6);background:rgba(253,88,30,.07)}
+.phase h3{margin-top:20px}
+.phase p{color:var(--muted-d);font-size:15.5px;margin:12px 0 0}
+.honest{margin-top:26px;font-size:15px;color:var(--muted-d);max-width:760px;border-left:2px solid var(--orange);padding-left:18px}
+
+/* shorts */
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
+.rail.six{grid-template-columns:repeat(6,1fr)}
+.short{display:block;border-radius:16px;overflow:hidden;position:relative;aspect-ratio:9/16;background:var(--ink-3);border:1px solid var(--line-d);transition:transform .3s}
+.light .short{border-color:var(--line-l)}
+.short:hover{transform:translateY(-4px)}
+.short img{width:100%;height:100%;object-fit:cover}
+.short span{position:absolute;inset:auto 0 0 0;padding:48px 14px 14px;font:600 13.5px/1.3 var(--body);color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.88))}
+.short em{position:absolute;top:12px;left:12px;font:600 10.5px var(--mono);font-style:normal;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.6);color:#fff;padding:5px 8px;border-radius:6px}
+.series{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.series span{font:500 13px var(--mono);padding:8px 14px;border-radius:999px;background:var(--white);border:1px solid var(--line-l);color:var(--text-l)}
+
+/* faq */
+.faq{max-width:820px;margin:56px 0 0}
+details{border-top:1px solid var(--line-l);padding:22px 0}
+details:last-child{border-bottom:1px solid var(--line-l)}
+summary{font:600 20px var(--display);letter-spacing:-.02em;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--orange-ink);font-weight:500;font-size:24px;line-height:1}
+details[open] summary:after{content:"–"}
+details p{color:var(--muted-l);margin:12px 0 0;max-width:700px}
+
+/* contact */
+.contact{background:radial-gradient(900px 500px at 50% 110%,rgba(253,88,30,.22),transparent 70%),var(--ink)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.next{list-style:none;padding:0;margin:36px 0 0;display:grid;gap:18px;counter-reset:s}
+.next li{counter-increment:s;padding-left:44px;position:relative;color:var(--muted-d)}
+.next li b{color:var(--text-d);display:block;font-weight:600}
+.next li:before{content:counter(s);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;border:1px solid var(--orange);color:var(--orange);font:600 13px/26px var(--mono);text-align:center}
+form{background:var(--ink-2);border:1px solid var(--line-d);border-radius:var(--r);padding:32px;display:grid;gap:18px}
+label{display:grid;gap:8px;font-size:13.5px;font-weight:500;color:var(--muted-d)}
+input,select,textarea{font:400 16px var(--body);color:var(--text-d);background:var(--ink);border:1px solid var(--line-d);border-radius:12px;padding:14px;width:100%}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--orange)}
+form .btn{justify-content:center}
+.note{font-size:13px;color:var(--muted-d);margin:0}
+footer{background:#000;padding:44px 0;font-size:14px;color:var(--muted-d);border-top:1px solid var(--line-d)}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+footer .fl{display:flex;gap:24px;flex-wrap:wrap}
+footer a:hover{color:#fff}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.hero .rv{opacity:1;transform:none;animation:up .9s cubic-bezier(.2,.7,.2,1) both}
+.hero .rv:nth-child(2){animation-delay:.08s}.hero .rv:nth-child(3){animation-delay:.16s}.hero .rv:nth-child(4){animation-delay:.24s}.hero .rv:nth-child(5){animation-delay:.3s}.hero .rv:nth-child(6){animation-delay:.38s}
+@keyframes up{from{opacity:0;transform:translateY(26px)}}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.window{transform:none!important}}
+
+@media (max-width:980px){
+  section{padding:84px 0}
+  .links{display:none}
+  .grid3,.road,.promise,.more{grid-template-columns:1fr}
+  .split,.cgrid{grid-template-columns:1fr;gap:44px}
+  .steps{grid-template-columns:1fr 1fr;row-gap:36px}
+  .proof .wrap{grid-template-columns:1fr 1fr}
+  .stat{padding:28px 18px}
+  .stat:nth-child(odd){border-left:0;padding-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line-d)}
+  .rail,.rail.six{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-24px;padding-inline:24px;scrollbar-width:none}
+  .rail .short{flex:0 0 46%;scroll-snap-align:start}
+  .hero{padding-top:118px}
+  .stage{margin-top:54px}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .steps{grid-template-columns:1fr}
+  .rail,.rail.six{margin-inline:-16px;padding-inline:16px}
+  .rail .short{flex-basis:62%}
+  .btn{padding:15px 22px}
+  form{padding:22px}
+  nav .btn{padding:9px 14px}
+}
+@media (prefers-reduced-motion:reduce){.hero .rv{animation:none}}
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/fasterfold-mark.png" alt="">FasterFold</a>
+    <div class="links">
+      <a href="#build">What we build</a>
+      <a href="#products">Products</a>
+      <a href="#process">How we work</a>
+      <a href="#robotics">Robotics</a>
+      <a href="#channel">Channel</a>
+    </div>
+    <a class="btn btn-p" href="#contact">Start a project</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="kicker rv">Agentic software · Agent observability · Robotics</p>
+    <h1 class="rv">Build with AI.<br><span class="o">Ship with proof.</span></h1>
+    <p class="lede rv">FasterFold builds AI agents that do real work, and the instruments that show exactly what they did and what it cost. Software today. Robots next.</p>
+    <div class="cta rv">
+      <a class="btn btn-p" href="#contact">Start a project
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <a class="btn btn-g" href="#products">See what we've shipped</a>
+    </div>
+    <p class="fine rv">Everything on this page links to something you can open and check.</p>
+    <div class="stage rv">
+      <div class="window" id="win">
+        <div class="chrome"><i></i><i></i><i></i><span>localhost:13000 · TokenTelemetry</span></div>
+        <img src="assets/tt-dashboard.jpg" width="2400" height="1155" alt="TokenTelemetry dashboard showing sessions, tokens, active projects and estimated cost across ten detected AI agents">
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="proof" aria-label="Proof points">
+  <div class="wrap">
+    <div class="stat rv"><b>21</b><span>AI agents observed by <a href="https://tokentelemetry.com/" target="_blank" rel="noopener">TokenTelemetry</a>, our open-source product</span></div>
+    <div class="stat rv"><b>108</b><span>GitHub stars and 17 forks on <a href="https://github.com/VasiHemanth/tokentelemetry" target="_blank" rel="noopener">the public repo</a></span></div>
+    <div class="stat rv"><b>35</b><span>research videos <a href="https://www.youtube.com/@fasterfold-ai" target="_blank" rel="noopener">published</a> since October 19, 2026</span></div>
+    <div class="stat rv"><b>MIT</b><span>licensed. Read every line before you trust a word of ours</span></div>
+  </div>
+  <div class="wrap"><p class="asof">Figures as of November 10, 2026</p></div>
+</section>
+
+<section class="light" id="build">
+  <div class="wrap">
+    <p class="kicker rv">What we build</p>
+    <h2 class="rv">Agents that finish the job.<br>Numbers that show it.</h2>
+    <p class="lede rv">Most AI projects stall between a good demo and a system you can rely on. We close that gap with three kinds of work.</p>
+    <div class="grid3">
+      <article class="card rv">
+        <div class="n">01</div>
+        <h3>Agentic applications</h3>
+        <p>Custom agents that plan, call your tools and complete multi-step work inside your product or your operations.</p>
+        <ul><li>Workflow and tool design</li><li>Evaluations before launch</li><li>Human approval where it matters</li></ul>
+      </article>
+      <article class="card rv">
+        <div class="n">02</div>
+        <h3>Agent observability and cost</h3>
+        <p>See where tokens go, where agents get stuck and which model is the cheapest one that still does the job.</p>
+        <ul><li>Token and cost reviews</li><li>Session traces your team can read</li><li>Built on TokenTelemetry</li></ul>
+      </article>
+      <article class="card rv">
+        <div class="n">03</div>
+        <h3>Automation pipelines</h3>
+        <p>End-to-end systems that turn a rough input into a finished output. Ours turns a voice note into a published video.</p>
+        <ul><li>Content and media pipelines</li><li>Checks at every stage</li><li>Runs on your own machines</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="products">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <span class="tag rv">Live · Open source</span>
+        <div class="pname rv"><img src="assets/tokentelemetry.svg" alt=""><h2>TokenTelemetry</h2></div>
+        <p class="lede rv">Understand what your agents actually did. One local dashboard for tokens, estimated cost and step-by-step traces across 21 coding and autonomous agents.</p>
+        <ul class="feat rv">
+          <li><b>One command, no SDK.</b> It reads the logs your agents already write. Nothing to wire into your code.</li>
+          <li><b>Your data stays on your machine.</b> Prompts, logs and costs are read locally. Anonymous, content-free usage stats can be switched off.</li>
+          <li><b>Every agent in one place.</b> Claude Code, Codex, Cursor, Gemini CLI, Copilot, Hermes and more.</li>
+        </ul>
+        <div class="term rv"><code id="cmd">curl -fsSL https://tokentelemetry.com/install.sh | bash</code><button type="button" id="copy">Copy</button></div>
+        <div class="cta rv">
+          <a class="btn btn-p" href="https://tokentelemetry.com/" target="_blank" rel="noopener">Visit tokentelemetry.com</a>
+          <a class="btn btn-g" href="https://github.com/VasiHemanth/tokentelemetry" target="_blank" rel="noopener">View source</a>
+        </div>
+      </div>
+      <div class="shot rv"><img src="assets/tt-distribution.jpg" width="1020" height="1130" loading="lazy" alt="TokenTelemetry agent distribution panel listing sessions per agent"></div>
+    </div>
+
+    <div class="more">
+      <article class="pcard rv">
+        <span class="tag amber">In production · Internal</span>
+        <h3>The Shorts Engine</h3>
+        <p>An agentic pipeline that takes a recorded script and returns a finished, captioned, sound-designed video with sources and credits. It produces the FasterFold channel, so you can judge its output yourself.</p>
+        <a class="t" href="https://www.youtube.com/shorts/nMhBpQ8fWeQ" target="_blank" rel="noopener">Watch: I built an AI that edits my Shorts →</a>
+      </article>
+      <article class="pcard rv">
+        <span class="tag grey">In research</span>
+        <h3>Embodied agents</h3>
+        <p>The same loop that runs a software agent, perceive, plan, act, check, also runs a robot. We are building the measurement and control layer first, and studying the field in public.</p>
+        <a class="t" href="#robotics">See the roadmap →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="process">
+  <div class="wrap">
+    <p class="kicker rv">How we work</p>
+    <h2 class="rv">Small scope. Weekly proof.</h2>
+    <p class="lede rv">You should never have to take our word for progress. Every engagement is built so you can see it.</p>
+    <div class="steps">
+      <div class="step rv"><div class="n">01</div><h3>Map</h3><p>One call to pin down a single workflow worth automating and how we will know it works.</p></div>
+      <div class="step rv"><div class="n">02</div><h3>Pilot</h3><p>A narrow, working agent on your real task, not a slide deck.</p></div>
+      <div class="step rv"><div class="n">03</div><h3>Measure</h3><p>Traces, token cost and failure cases for every run, shared with you.</p></div>
+      <div class="step rv"><div class="n">04</div><h3>Ship</h3><p>Harden it, hand it over, and stay on to improve it if you want us to.</p></div>
+    </div>
+    <div class="promise">
+      <div class="rv"><b>You see the traces</b><span>Every agent we build is instrumented, so you can inspect what it did step by step.</span></div>
+      <div class="rv"><b>You know the cost</b><span>Estimated token spend is tracked from the first run, not discovered on the invoice.</span></div>
+      <div class="rv"><b>No inflated claims</b><span>If a model or an agent cannot do the job reliably, we say so and show the failures.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="robo" id="robotics">
+  <div class="wrap">
+    <p class="kicker rv">Where this goes</p>
+    <h2 class="rv">From agents on screens<br>to agents in the world.</h2>
+    <p class="lede rv">FasterFold is becoming a robotics company. We are taking the long road there on purpose: earn trust with software agents first, then give them bodies.</p>
+    <div class="road">
+      <div class="phase now rv"><span class="tag">Now</span><h3>Agents you can measure</h3><p>Agentic applications for clients, and TokenTelemetry to observe them. Shipping today.</p></div>
+      <div class="phase rv"><span class="tag amber">Next</span><h3>Agents that operate systems</h3><p>Long-running agents that drive real tools and equipment, with approval gates and a full record of every action.</p></div>
+      <div class="phase rv"><span class="tag grey">Then</span><h3>Agents with bodies</h3><p>Embodied agents built on the same foundations: perception, planning, action, and proof of what happened.</p></div>
+    </div>
+    <p class="honest rv">To be clear: we do not sell robots today. What we do is track the field closely and publish what we learn, including the parts the launch videos leave out.</p>
+    <div class="rail" id="rail-robots"></div>
+  </div>
+</section>
+
+<section class="light" id="channel">
+  <div class="wrap">
+    <p class="kicker rv">Research in public</p>
+    <h2 class="rv">We show our work.<br>Every week.</h2>
+    <p class="lede rv">The FasterFold channel tests new agents, explains how they work and tracks what they cost. Sources are listed under every video.</p>
+    <div class="series rv">
+      <span>Agent Wars</span><span>Robot Watch</span><span>Coding Agent Index</span><span>Agents Are Burning Your Money</span><span>Explained in 40s</span><span>Agent Trust Check</span><span>Tool Drop</span><span>Build in Public</span>
+    </div>
+    <div class="rail six" id="rail-channel"></div>
+    <div class="cta rv"><a class="btn btn-p" href="https://www.youtube.com/@fasterfold-ai?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a><a class="btn btn-g" href="https://www.youtube.com/@fasterfold-ai/shorts" target="_blank" rel="noopener">Watch all videos</a></div>
+  </div>
+</section>
+
+<section class="white" id="faq">
+  <div class="wrap">
+    <p class="kicker rv">Straight answers</p>
+    <h2 class="rv">Before you ask.</h2>
+    <div class="faq rv">
+      <details open><summary>What can you build for us right now?</summary><p>Agentic applications, agent cost and observability work, and automation pipelines. If your project is outside that, tell us anyway and we will say plainly whether we are the right team.</p></details>
+      <details><summary>How do we know the agent will actually work?</summary><p>We start with a narrow pilot on your real task and share the traces, the costs and the failures. You decide whether to continue based on what you can see.</p></details>
+      <details><summary>Is TokenTelemetry really free?</summary><p>Yes. It is MIT licensed and runs on your own machine. The source is public on GitHub.</p></details>
+      <details><summary>Do you build robots?</summary><p>Not yet. Robotics is where FasterFold is headed, and the agent and measurement work we do today is the foundation for it. We will not claim otherwise until there is hardware to show.</p></details>
+      <details><summary>Why does a software studio run a YouTube channel?</summary><p>Because it is the fastest way for you to judge how we think. The channel is also made by our own agentic pipeline, so it is a working demo of what we build.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="cgrid">
+      <div>
+        <p class="kicker rv">Start a project</p>
+        <h2 class="rv">Tell us the one workflow you want an agent to own.</h2>
+        <ol class="next rv">
+          <li><b>You send a short brief</b>Four fields. No sales deck comes back.</li>
+          <li><b>We reply with a straight answer</b>Whether we can build it, how we would test it and what we would need.</li>
+          <li><b>We scope a pilot together</b>Small enough to judge quickly, real enough to matter.</li>
+        </ol>
+      </div>
+      <form id="brief" class="rv">
+        <label>Your name<input name="name" autocomplete="name" required></label>
+        <label>Company<input name="company" autocomplete="organization"></label>
+        <label>What do you want to build?
+          <select name="type">
+            <option>An agentic application</option>
+            <option>Agent observability and cost control</option>
+            <option>An automation pipeline</option>
+            <option>A robotics collaboration</option>
+            <option>Something else</option>
+          </select>
+        </label>
+        <label>The workflow, in a few sentences<textarea name="details" required></textarea></label>
+        <button class="btn btn-p" type="submit">Send the brief</button>
+        <p class="note" id="formnote">This opens your email app with the brief filled in. Nothing is stored on this site.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/fasterfold-mark.png" alt="">FasterFold</a>
+    <div class="fl">
+      <a href="https://tokentelemetry.com/" target="_blank" rel="noopener">TokenTelemetry</a>
+      <a href="https://github.com/VasiHemanth/tokentelemetry" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.youtube.com/@fasterfold-ai" target="_blank" rel="noopener">YouTube</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <span>© 2026 FasterFold. Build with AI. Ship with proof.</span>
+  </div>
+</footer>
+
+<script>
+/* ---- Site settings: set the address that project briefs should go to. ---- */
+const CONTACT_EMAIL = "";
+
+const ROBOTS = [
+  ["xE5c7uAxPtc","NVIDIA's new humanoid uses Chinese robot hands"],
+  ["643txNG-jsE","This $20,000 home robot might have a human steering it"],
+  ["2MEIrWNVgNA","The robot hand race: 13 vs 20 vs 22 joints"],
+  ["YgtSqqsPJy8","Boston Dynamics can now build an Atlas robot in a day"]
+];
+const CHANNEL = [
+  ["eHpj7mra-bU","Why your AI coding bill doubled","Cost"],
+  ["sqWiF2AZY6g","What is an AI agent? Explained in 40 seconds","Explained"],
+  ["9m02dSMvUrk","MCP explained simply","Explained"],
+  ["nMhBpQ8fWeQ","I built an AI that edits my Shorts","Build in public"],
+  ["YyFVpS6QgkQ","xAI's Grok Bots share one computer","Trust check"],
+  ["HV9LS1dSkSc","Muse vs dots vs Duet vs Grok Bot: what they cost","Agent Wars"]
+];
+function rail(id, items, label){
+  document.getElementById(id).innerHTML = items.map(([v,t,l]) =>
+    `<a class="short rv" href="https://www.youtube.com/shorts/${v}" target="_blank" rel="noopener">
+      <img loading="lazy" src="https://i.ytimg.com/vi/${v}/oar2.jpg" alt="" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${v}/hqdefault.jpg'">
+      <em>${l||label}</em><span>${t}</span></a>`).join("");
+}
+rail("rail-robots", ROBOTS, "Robot Watch");
+rail("rail-channel", CHANNEL);
+
+const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }), {threshold:.12, rootMargin:"0px 0px -6% 0px"});
+document.querySelectorAll(".rv").forEach((el,i) => { el.style.transitionDelay = (i%4)*70+"ms"; io.observe(el); });
+
+const win = document.getElementById("win");
+if(!matchMedia("(prefers-reduced-motion:reduce)").matches){
+  addEventListener("scroll", () => {
+    const p = Math.min(1, scrollY/520);
+    win.style.transform = `rotateX(${9*(1-p)}deg)`;
+  }, {passive:true});
+}
+
+document.getElementById("copy").addEventListener("click", async e => {
+  try{ await navigator.clipboard.writeText(document.getElementById("cmd").textContent); e.target.textContent="Copied"; }
+  catch{ e.target.textContent="Select"; }
+  setTimeout(()=>e.target.textContent="Copy",1600);
+});
+
+document.getElementById("brief").addEventListener("submit", e => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const body = `Name: ${f.get("name")}\nCompany: ${f.get("company")||"-"}\nLooking for: ${f.get("type")}\n\n${f.get("details")}`;
+  location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("Project brief: "+f.get("type"))}&body=${encodeURIComponent(body)}`;
+  document.getElementById("formnote").textContent = "Your email app should now be open with the brief ready to send.";
+});
+</script>
+</body>
+</html>
